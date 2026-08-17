@@ -18,12 +18,29 @@ openFPGALoader -b tangprimer25k tang-primer-25k/sipeed_tang_primer_25k.fs
 openFPGALoader -b tangprimer25k -f tang-primer-25k/sipeed_tang_primer_25k.fs
 ```
 
-## Test Binaries (Phase 3)
+## Test Binaries
 
-RISC-V binaries for the VexRiscv soft CPU, loaded via the esp32-gdb-mqtt file manager:
+RISC-V bare-metal binaries for the VexRiscv soft CPU. Upload to the ESP32 via the file manager, then load with `monitor riscv_load <name>`.
 
-- `riscv/blink0.bin` — LED 0 slow blink (TBD)
-- `riscv/blink1.bin` — LED 1 double blink (TBD)
-- `riscv/hello.bin` — UART hello + LED cycle (TBD)
+| Binary | Size | Behavior |
+|--------|------|----------|
+| `riscv/hello.bin` | 87 B | Prints "Hello from VexRiscv!" to UART, then spins |
+| `riscv/count.bin` | 184 B | Prints incrementing hex counter to UART every ~0.5s |
 
-These will be built when Phase 3 (ESP32 + FPGA integration) begins.
+Output is visible on `device/<id>/console/out` via the UART relay.
+
+### Building
+
+Requires a RISC-V GCC toolchain (`riscv64-elf-gcc` or similar):
+
+```bash
+cd riscv
+make
+```
+
+## Rebuilding the Bitstream
+
+```bash
+source ~/fpga/oss-cad-suite/environment
+python3 build_soc_tang.py
+```
